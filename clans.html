@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<script language="JavaScript">
+var lines;
+function loadTSV(file) {
+    var request;
+    if (window.XMLHttpRequest) {
+        // IE7+, Firefox, Chrome, Opera, Safari
+        request = new XMLHttpRequest();
+    } else {
+        // code for IE6, IE5
+        request = new ActiveXObject('Microsoft.XMLHTTP');
+    }
+    // load
+    request.open('GET', file, false);
+    request.send();
+    lines = (request.responseText).split('\n');
+}
+
+loadTSV("https://docs.google.com/spreadsheets/d/1DeKApUBVnsiHMlanmlZhH5oI7YYblg-Z6-ni8piRDtU/pub?gid=904761712&single=true&output=tsv");
+console.log(lines);
+</script>
+
+<script language="JavaScript" src="bros.js"></script>
+
+<script language="JavaScript">
+
+
+var expanded = new Array( clans.length );
+
+for( var i = 0; i < expanded.length; ++i ) {
+		expanded[i] = false;
+}
+
+function clanListing( idNum ) {
+
+	var toRet = "";
+
+	var lst = clans[idNum];
+
+	var i;
+
+	for( i = 0; i < lst.length; ++i ) {
+
+		toRet = toRet.concat( "<span" );
+
+		if(lst[i].status == EXPELLED) toRet = toRet.concat( " class='expelled'" );
+
+		else if( lst[i].status == ACTIVE ) toRet = toRet.concat( " class='active'" );
+
+		toRet = toRet.concat( ">" );
+
+		var depth = broDepth(lst[i]);
+
+		for( var j = 0; j < depth; ++j ) toRet = toRet.concat("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+
+		toRet = toRet.concat( "&nbsp;&nbsp;&nbsp;&nbsp;", lst[i].first, " ", lst[i].last,
+
+                                      (lst[i].pclass > 0 ? (" (" + classNames[lst[i].pclass] + ")") : ""),
+
+		                      "<br />" );
+
+		toRet = toRet.concat( "</span>" );
+	}
+
+	return toRet;
+
+}
+
+function expandClan( id ) {
+
+	var idNum = parseInt(id);
+
+	if( expanded[idNum] == true ) document.getElementById(id).innerHTML = "";
+
+	else document.getElementById( id ).innerHTML=clanListing( idNum );
+
+	expanded[idNum] = !expanded[idNum];
+
+}
+
+
+</script>
+
+<style type="text/css">
+
+<!--
+.active {color:#00FF33;
+}
+.expelled {color:#888888;
+}
+.style4 {	font-family: Arial;
+ font-weight: bold;
+}
+-->
+
+</style>
+
+</head>
+
+
+<body>
+<span class="style4">::The Brothers by Family Clan::</span>
+</p>
+<span class="style4"><a href="index.php?page=class">::The Brothers by Probationary Class::</a></span>
+</p>
+<br />
+
+<strong> Key:</strong>
+<span class="active">Active</span>
+Alumni
+<span class="expelled">Expelled</span>
+<br />
+
+<br />
+
+<script language="JavaScript" type="text/javascript">
+
+var i;
+
+for( i = 0; i < clans.length; ++i ) {
+
+	document.write( "<a href='javascript:expandClan(\"" + i + "\")'>"
+
+       + (clans[i])[0].last
+	                + "</a><br /><span id='" + i + "'></span>" );
+
+}
+
+</script>
+
+</body>
+</html>

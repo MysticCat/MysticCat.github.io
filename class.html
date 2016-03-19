@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<head>
+
+<script language="JavaScript">
+var lines;
+function loadTSV(file) {
+    var request;
+    if (window.XMLHttpRequest) {
+        // IE7+, Firefox, Chrome, Opera, Safari
+        request = new XMLHttpRequest();
+    } else {
+        // code for IE6, IE5
+        request = new ActiveXObject('Microsoft.XMLHTTP');
+    }
+    // load
+    request.open('GET', file, false);
+    request.send();
+    lines = (request.responseText).split('\n');
+}
+
+loadTSV("https://docs.google.com/spreadsheets/d/1DeKApUBVnsiHMlanmlZhH5oI7YYblg-Z6-ni8piRDtU/pub?gid=904761712&single=true&output=tsv");
+console.log(lines);
+</script>
+
+<script language="JavaScript" src="bros.js"></script>
+
+<script language="JavaScript">
+
+
+var expanded = new Array( pledgeClasses.length );
+
+for( var i = 0; i < expanded.length; ++i ) {
+		expanded[i] = false;
+}
+
+
+var facultyExpanded = false;
+
+
+function expandFaculty( ) {
+
+	if( facultyExpanded == true ) document.getElementById("faculty").innerHTML = "";
+
+	else document.getElementById( "faculty" ).innerHTML=classList( facultyBros );
+
+	facultyExpanded = !facultyExpanded;
+
+}
+
+
+var honoraryExpanded = false;
+
+
+function expandHonorary( ) {
+
+	if(honoraryExpanded == true ) document.getElementById("honorary").innerHTML = "";
+
+	else document.getElementById( "honorary" ).innerHTML=classList( honoraryBros );
+
+	honoraryExpanded = !honoraryExpanded;
+
+}
+
+
+function expandClass( id ) {
+
+	var idNum = parseInt(id);
+
+	if( expanded[idNum] == true ) document.getElementById(id).innerHTML = "";
+
+	else document.getElementById( id ).innerHTML=classList( pledgeClasses[idNum] );
+
+	expanded[idNum] = !expanded[idNum];
+
+}
+
+
+function classList( lst ) {
+
+	var toRet = "";
+
+	var i;
+
+	for( i = 0; i < lst.length; ++i ) {
+
+		toRet = toRet.concat( "<span " );
+
+		if( lst[i].status == EXPELLED ) toRet = toRet.concat( "class='expelled'" );
+
+		else if( lst[i].status == ACTIVE ) toRet = toRet.concat( "class='active'" );
+
+		toRet = toRet.concat( ">&nbsp;&nbsp;&nbsp;&nbsp;", lst[i].first, " ", lst[i].last );
+
+		if(lst[i].pclass >= 0 )
+
+			toRet = toRet.concat( " (", getClassInitDate( lst[i].pclass ), ")" );
+
+		toRet = toRet.concat( "<br /></span>" );
+
+	}
+
+	return toRet;
+
+}
+
+
+</script>
+
+<style type="text/css">
+
+<!--
+.active {color:#00FF33;
+}
+.expelled {color:#888888;
+}
+.style4 {	font-family: Arial;
+font-weight: bold;
+}
+-->
+
+</style>
+
+</head>
+
+
+<body>
+<span class="style4"><a href="index.php?page=clans">::The Brothers by Family Clan::</a></span>
+</p>
+<span class="style4">::The Brothers by Probationary Class::</span>
+</p>
+<br />
+
+<strong>Key:</strong>
+<span class="active">Active</span>
+Alumni
+<span class="expelled">Expelled</span>
+<br />
+
+<br />
+
+<a href='javascript:expandFaculty()'>Faculty</a>
+<br />
+
+<span id='faculty'></span>
+<a href='javascript:expandHonorary()'>Honorary</a>
+<br />
+
+<span id='honorary'></span>
+
+</p>
+
+<script language="JavaScript" type="text/javascript">
+
+var i;
+
+for( i = 0; i < pledgeClasses.length; ++i ) {
+
+	if( pledgeClasses[i] != null ) {
+
+		document.write( "<a href='javascript:expandClass(\"" + i + "\")'>"
+ + classNames[i] + ": " + getClassInitDate(i)
+	+ "</a><br /><span id='" + i + "'></span>" );	}
+
+}
+
+</script>
+
+</body>
+
+</html>
